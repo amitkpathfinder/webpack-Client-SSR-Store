@@ -1,0 +1,11 @@
+{
+  "name": "webpack-client-ssr-store",
+  "version": "1.0.0",
+  "description": "First Complete project of webpack, client, ssr and store usage.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Amit Kumar",
+  "license": "ISC"
+}
