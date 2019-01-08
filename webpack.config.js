@@ -8,15 +8,74 @@ console.log(process.env.NODE_ENV);
 const setMode = process.env.NODE_ENV==='development' ? process.env.NODE_ENV : 'production';
 console.log(setMode);
 
-const config = {
+const client = {
   mode: setMode,
-  //entry: './src/simple.js',
+  entry: './src/simple.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
   },
-  
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        use: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ],
+        exclude: /\.module\.css$/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
+        ],
+        include: /\.module\.css$/
+      },
+      {
+        test: /\.svg$/,
+        use: 'file-loader'
+      },
+      {
+        test: /\.png$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              mimetype: 'image/png'
+            }
+          }
+        ]
+      }
+    ]
+  },
+  resolve: {
+    extensions: [
+      '.js',
+      '.jsx'
+    ]
+  },
+  devServer: {
+    contentBase: './dist',
+	compress: true
+  }
+};
+
+
+const server = {
+  mode: setMode,
   entry: './src/server.js',
+  output: {
+    path: path.join(__dirname, 'src'),
+    filename: 'server-es5.js',
+    libraryTarget: 'commonjs2',
+  },
   target: 'node',
   node: {// Need this when working with express, otherwise the build fails
         __dirname: false,   // if you don't put this is, __dirname
@@ -72,8 +131,11 @@ const config = {
   },
   devServer: {
     contentBase: './dist',
-	compress: true
+  compress: true
   }
-}
+};
 
-module.exports = config;
+
+module.exports = [client, server];
+
+//module.exports = config;

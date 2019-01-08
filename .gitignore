@@ -6,3 +6,5 @@ package-lock.json
 node_modules
 dist
 
+src/server-es5.js
+

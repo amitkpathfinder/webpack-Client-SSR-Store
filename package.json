@@ -4,9 +4,12 @@
   "description": "First Complete project of webpack, client, ssr and store usage.",
   "main": "./src/simple.js",
   "scripts": {
-    "start": "NODE_ENV=development webpack-dev-server",
-    "start:dev": "NODE_ENV=production webpack && nodemon --watch src ./src/server.js",
-    "start:prod": "NODE_ENV=production webpack && node ./src/server.js"
+    "build": "NODE_ENV=production webpack -p",
+    "build:dev": "NODE_ENV=development webpack -d",
+    "start": "npm run build && node ./src/server-es5.js",
+    "start:dev": "export NODE_ENV=development webpack && nodemon --watch src ./src/server.js",
+    "start:dev:universal": "export NODE_ENV=development && export UNIVERSAL=true && npm run start:dev",
+    "start:universal": "export UNIVERSAL=true && npm run start"
   },
   "author": "Amit Kumar",
   "license": "ISC",

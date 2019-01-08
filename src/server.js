@@ -1,6 +1,6 @@
 var path = require("path");
 var express = require("express");
-//require('./simple.js');
+
 
 var PORT = 3000;
 var app = express();
@@ -13,7 +13,15 @@ app.set('views', path.join(__dirname, 'tpls'));
 
 app.use(express.static('dist'));
 
-const bodyData = 'Application Running on '+PORT+'...';
+var bodyData = 'Application Running on '+PORT+'...';
+
+if(process.env.UNIVERSAL){
+	require('./simple.js');	
+	bodyData = 'Application Running on '+PORT+'...' + a;
+}
+
+
+
 
 // respond with "hello world" when a GET request is made to the homepage
 // app.get('/', function (req, res) {
@@ -27,6 +35,7 @@ app.get("*", function (req, res) {
 });
 
 console.log('Server is running at -----------> ',PORT);
+console.log('Universal Rendering is',process.env.UNIVERSAL ? 'enabled' : 'disabled');
 app.listen(PORT);
 
 
