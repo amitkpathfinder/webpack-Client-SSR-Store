@@ -1,0 +1,8 @@
+#gnore all logs
+*.log
+package-lock.json
+
+# exclude everything
+node_modules
+dist
+
