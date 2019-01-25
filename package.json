@@ -4,20 +4,24 @@
   "description": "First Complete project of webpack, client, ssr and store usage.",
   "main": "./src/simple.js",
   "scripts": {
+    "clientapp": "NODE_ENV=development webpack-dev-server  --progress --colors",
     "build": "NODE_ENV=production webpack -p",
     "build:dev": "NODE_ENV=development webpack -d",
     "start": "npm run build && node ./src/server-es5.js",
-    "start:dev": "export NODE_ENV=development webpack && nodemon --watch src ./src/server.js",
+    "start:dev": "NODE_ENV=development webpack && nodemon --watch src ./src/server.js --exec babel-node",
     "start:dev:universal": "export NODE_ENV=development && export UNIVERSAL=true && npm run start:dev",
     "start:universal": "export UNIVERSAL=true && npm run start"
   },
   "author": "Amit Kumar",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "css-loader": "^2.1.0",
     "ejs": "^2.6.1",
     "file-loader": "^3.0.1",
@@ -30,6 +34,10 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "es6-promise": "^4.2.5",
+    "express": "^4.16.4",
+    "isomorphic-fetch": "^2.2.1",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
   }
 }

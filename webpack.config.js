@@ -10,10 +10,10 @@ console.log(setMode);
 
 const client = {
   mode: setMode,
-  entry: './src/simple.js',
+  entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: 'clientBundle.js'
   },
   module: {
     rules: [
@@ -63,7 +63,8 @@ const client = {
   },
   devServer: {
     contentBase: './dist',
-	compress: true
+	compress: true,
+  writeToDisk: true
   }
 };
 

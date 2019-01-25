@@ -2,9 +2,17 @@
 <html>
     <head>
         <title>React starter app</title>
+        <style type="text/css" media="screen">
+        	.readList{color:#666;}
+        	.readList > div {margin-top:2px;}
+        	.readList div > div{display:inline-block;}
+        	.readList .helloBox{background:#ececec;padding:2px;color:#333;font-weight:600;margin-right:2px;}
+        	.readList .nameBox{background:#ececec;padding:2px;}
+        	.clickActions{color:#0065de;font-weight:600;font-size:12px;}
+        </style>
     </head>
     <body>
-        <div id="app"><%= body %></div>
-        <script src="/bundle.js"></script>
+        <div id="app"><%- body %></div>
+        <script src="/clientBundle.js"></script>
     </body>
 </html>
