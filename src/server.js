@@ -2,9 +2,23 @@ import path from "path";
 import express from "express";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
-import TabComponent from './components/CompTabs';
+import App from './components/App';
 
-var PORT = 3000;
+import { StaticRouter, matchPath } from 'react-router-dom';
+import Routes from './components/Routes';
+
+import {FetchCategory, FetchListings} from './components/services';
+import {ReadAction} from './actions/Readaction';
+
+import { Provider } from 'react-redux';
+import {storeServer} from './store/store';
+
+
+
+const store = storeServer;
+console.log('storeServer',store.getState());
+
+var PORT = 4444;
 var app = express();
 
 app.set('view engine', 'ejs');
@@ -12,7 +26,6 @@ app.set('views', path.join(__dirname, 'tpls'));
 app.use(express.static('dist'));
 
 app.get("*", function (req, res) {
-
 
 /**************USER AGENT*****************/
 
@@ -28,18 +41,72 @@ var isMobile = isCallerMobile(req);
     useragent='mobile';
 }
 
-/**************USER AGENT*****************/
+const promises = Routes.reduce((acc, route) => {
+      if (matchPath(req.url, route) && route.component && route.component.loadData) {
+        acc.push(Promise.resolve(store.dispatch(route.component.loadData())));
+      }
+      return acc;
+    }, []);
 
-var bodyData = '';
-const reactHtml = ReactDOMServer.renderToString(<TabComponent userAgent={useragent} />);
+console.log('storeServer in *',store.getState());
 
-	if(process.env.UNIVERSAL){
-		
-		bodyData = reactHtml;
-	}
+  Promise.all(promises).then(() => {
+    // Let's add the data to the context
+    const context = store;
 
-  	res.render('index',{body:bodyData});
+    console.log(store.getState());
+
+    var bodyData = '';
+
+    const reactHtml = ReactDOMServer.renderToString(
+                  <Provider store={store}>
+                  <StaticRouter location={req.url} context={context}>
+                    <App userAgent={useragent} />
+                  </StaticRouter>
+                  </Provider>
+                );
+    
+    if(process.env.UNIVERSAL){
+       bodyData = reactHtml;
+    }
+
+    res.render('index',{body:bodyData, preloadedState:store.getState()});
+  });
 });
+
+
+
+
+
+
+// FetchCategory()
+//   .then(data => {
+//       store.dispatch(ReadAction(data.records));
+// });
+
+
+// console.log('storeServer in *',store.getState());
+
+
+// const context = store;
+
+// var bodyData = '';
+// const reactHtml = ReactDOMServer
+//                     .renderToString
+//                       (
+//                         <Provider store={store}>
+//                         <StaticRouter location={req.url} context={context}>
+//                           <App userAgent={useragent} />
+//                         </StaticRouter>
+//                         </Provider>
+//                       );
+
+// 	if(process.env.UNIVERSAL){
+// 		bodyData = reactHtml;
+// 	}
+
+//   	res.render('index',{body:bodyData, preloadedState:store.getState()});
+// });
 
 console.info('😀 Server is running at -----------> ',PORT);
 console.log('Universal Rendering is',process.env.UNIVERSAL ? 'enabled' : 'disabled');

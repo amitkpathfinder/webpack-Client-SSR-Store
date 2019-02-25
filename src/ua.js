@@ -4,6 +4,6 @@ if (isMobile) {
   useragent = 'mobile';
 }
 
-console.log(useragent);
+console.log('%c'+useragent, 'background:#2ee867;color:#000');
 
 export default useragent;

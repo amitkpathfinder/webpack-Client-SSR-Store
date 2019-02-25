@@ -13,6 +13,7 @@
     </head>
     <body>
         <div id="app"><%- body %></div>
+        <script>window.__PRELOADED_STATE__ = <%- JSON.stringify(preloadedState) -%></script>
         <script src="/clientBundle.js"></script>
     </body>
 </html>
